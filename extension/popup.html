@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusSentinel</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FocusSentinel</h1>
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-dot"></span>
+                <span class="status-text">OFF</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="control-group">
+                <label class="switch">
+                    <input type="checkbox" id="focusToggle">
+                    <span class="slider round"></span>
+                </label>
+                <span class="toggle-label">Focus Mode</span>
+            </div>
+
+            <div class="whitelist-section">
+                <h2>Allowed Domains</h2>
+                <div class="input-group">
+                    <input type="text" id="domainInput" placeholder="example.com">
+                    <button id="addDomainBtn">Add</button>
+                </div>
+                <div class="error-msg" id="errorMsg"></div>
+                
+                <ul id="whitelist" class="domain-list">
+                    <!-- Items injected by JS -->
+                </ul>
+            </div>
+        </main>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>

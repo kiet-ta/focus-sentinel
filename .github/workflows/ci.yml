@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  host-build-test:
+    name: Host (Rust)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Rust
+      uses: actions-rust-lang/setup-rust-toolchain@v1
+      with:
+        toolchain: stable
+        
+    - name: Clean Cargo Cache (Windows)  # Prevent cache corruption on Windows runners
+      if: runner.os == 'Windows'
+      run: |
+        cargo clean
+
+    - name: Build
+      working-directory: host
+      run: cargo build --release --verbose
+
+    - name: Run tests
+      working-directory: host
+      run: cargo test --verbose
+
+    - name: Upload Host Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: focus-sentinel-host-${{ matrix.os }}
+        path: |
+          host/target/release/focus_sentinel_host
+          host/target/release/focus_sentinel_host.exe
+        if-no-files-found: ignore
+
+  extension-build:
+    name: Extension (JS)
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Validate Manifest
+      working-directory: extension
+      run: |
+        if [ ! -f manifest.json ]; then
+            echo "manifest.json not found!"
+            exit 1
+        fi
+        
+    - name: Zip Extension
+      run: |
+        cd extension
+        zip -r ../extension.zip ./*
+        
+    - name: Upload Extension Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: focus-sentinel-extension
+        path: extension.zip

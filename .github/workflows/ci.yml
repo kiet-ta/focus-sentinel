@@ -8,6 +8,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   host-build-test:
@@ -27,6 +28,7 @@ jobs:
         
     - name: Clean Cargo Cache (Windows)  # Prevent cache corruption on Windows runners
       if: runner.os == 'Windows'
+      working-directory: host
       run: |
         cargo clean
 

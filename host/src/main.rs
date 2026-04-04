@@ -1,6 +1,5 @@
 use byteorder::{ReadBytesExt, WriteBytesExt, LittleEndian};
 use serde::{Deserialize, Serialize};
-use std::env;
 use std::fs;
 use std::io::{self, Read, Write};
 use std::path::PathBuf;
@@ -71,8 +70,8 @@ fn load_config() -> Config {
 
 fn save_config(config: &Config) {
     let path = get_config_path();
-    if let sticky = serde_json::to_string_pretty(config) {
-         let _ = fs::write(path, sticky);
+    if let Ok(data) = serde_json::to_string_pretty(config) {
+        let _ = fs::write(path, data);
     }
 }
 

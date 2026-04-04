@@ -8,3 +8,4 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 dirs = "5.0"
 byteorder = "1.4" # Useful for writing little-endian integers
+url = "2.5"        # URL parsing for domain matching
